@@ -10,6 +10,9 @@ public class GameEngine {
 	BackgroundPanel im;
 	
 	public GameEngine(int width, int height, String title){
+		String os = System.getProperty("os.name");
+		System.out.println("OS: " + os);
+		
 		Dimension size = new Dimension(width,height);
 		frame = new JFrame(title);
 		frame.setMinimumSize(size);	    

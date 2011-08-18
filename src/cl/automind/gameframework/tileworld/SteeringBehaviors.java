@@ -2,6 +2,7 @@ package cl.automind.gameframework.tileworld;
 
 import java.util.Vector;
 
+import javazoom.jl.player.Player;
 import cl.automind.math.Coordinate;
 import cl.automind.math.Vector2D;
 
@@ -20,7 +21,7 @@ public class SteeringBehaviors {
 			Vector2D vtpos = new Vector2D(tpos);
 			Vector2D vppos = new Vector2D(ppos);
 			vtpos = vtpos.sub(vppos);
-			System.out.println("antes de normalizar " + vtpos);
+			System.out.println("antes de normalizar " + t + "\t"+ vtpos);
 
 			aux.add(vtpos);
 		}

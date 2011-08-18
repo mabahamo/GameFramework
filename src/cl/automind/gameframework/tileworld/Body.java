@@ -16,6 +16,9 @@ public class Body extends Observable{
 	private boolean enabled = true;
 	private boolean moving = false;
 	private boolean needCheckForCollisions = true;
+	
+	//cuantos cuadros puede avanzar en cada direccion
+	private int speed = 1;
 
 	public Body(int x, int y) {
 		setPosition(x,y);
@@ -69,7 +72,7 @@ public class Body extends Observable{
 	
 	
 	public int getSpeed(){
-		return 1;
+		return speed;
 	}
 
 	public void update() {
@@ -88,8 +91,7 @@ public class Body extends Observable{
 		}
 		
 //		System.out.println("dx: " + dx + "\tdy: " + dy);
-		
-		
+
 		//al terminar el movimiento seteamos el tile en el que estamos
 		if (moving && dx == 0 && dy == 0){
 			moving = false;
@@ -101,6 +103,13 @@ public class Body extends Observable{
 	}
 
 	public void moveTo(int x2, int y2) {
+		if (Math.abs(x2) > speed){
+			x2 = (int)(Math.signum(x2)*speed);
+		}
+		if (Math.abs(y2) > speed){
+			y2 = (int)(Math.signum(x2)*speed);
+		}
+		System.out.println("moveTo " + x2 + "," + y2);
 		setTileTarget(getTileX()+x2,getTileY()+y2);
 	}
 

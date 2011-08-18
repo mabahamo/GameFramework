@@ -71,9 +71,6 @@ public class World implements Observer{
 			if (!b.disabled() && decorator != null){
 				decorator.paint(g2,b);
 			}
-			else {
-				System.out.println("Not paint " + b);
-			}
 		}
 	}
 

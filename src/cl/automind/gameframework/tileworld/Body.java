@@ -19,7 +19,7 @@ public class Body extends Observable{
 	
 	//cuantos cuadros puede avanzar en cada direccion
 	private int speed = 1;
-
+	
 	public Body(int x, int y) {
 		setPosition(x,y);
 	}
@@ -92,6 +92,8 @@ public class Body extends Observable{
 		
 //		System.out.println("dx: " + dx + "\tdy: " + dy);
 
+		
+		
 		//al terminar el movimiento seteamos el tile en el que estamos
 		if (moving && dx == 0 && dy == 0){
 			moving = false;

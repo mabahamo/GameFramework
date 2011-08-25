@@ -25,7 +25,7 @@ public abstract class AbstractLevel extends JPanel implements GameLevelInterface
 		while(running){
 			update();
 			try {
-				Thread.sleep(17);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

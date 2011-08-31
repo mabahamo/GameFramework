@@ -14,11 +14,12 @@ public class Body extends Observable{
 	
 	public int heading = 0;
 	private boolean enabled = true;
-	private boolean moving = false;
+	protected boolean moving = false;
 	private boolean needCheckForCollisions = true;
 	
+	
 	//cuantos cuadros puede avanzar en cada direccion
-	private int speed = 1;
+	private int speed = 2;
 	
 	public Body(int x, int y) {
 		setPosition(x,y);
@@ -74,6 +75,35 @@ public class Body extends Observable{
 	public int getSpeed(){
 		return speed;
 	}
+	
+	protected void checkHeading(float dx, float dy) {
+		if (dx == 0 && dy == 0){
+			return;
+		}
+		if (dx != 0){
+			heading = (int)(180*Math.atan(Math.abs(dy/dx))/Math.PI);
+			if (dx < 0 && dy < 0){
+				heading = 180 + heading;
+			}
+			if (dx < 0 && dy > 0){
+				heading = 90 + heading;
+			}
+			if (dx > 0 && dy < 0){
+				heading = 270 + heading;
+			}
+			if (dx > 0 && dy > 0){
+				
+			}
+		}
+		else {
+			if (dy > 0){
+				heading = 90;
+			}
+			else {
+				heading = 270;
+			}
+		}
+	}
 
 	public void update() {
 		if (disabled()){
@@ -89,10 +119,7 @@ public class Body extends Observable{
 		if (dy != 0) {
 			this.sy = this.sy + (dy / Math.abs(dy))*getSpeed()*SIZE/FPS;
 		}
-		
-//		System.out.println("dx: " + dx + "\tdy: " + dy);
-
-		
+		;
 		
 		//al terminar el movimiento seteamos el tile en el que estamos
 		if (moving && dx == 0 && dy == 0){
@@ -102,6 +129,13 @@ public class Body extends Observable{
 			setChanged();
 			notifyObservers(new BodyPositionEvent(x,y));
 		}
+		
+		checkHeading(dx,dy);
+		
+	}
+	
+	public boolean isMoving(){
+		return moving;
 	}
 
 	public void moveTo(int x2, int y2) {
@@ -111,7 +145,7 @@ public class Body extends Observable{
 		if (Math.abs(y2) > speed){
 			y2 = (int)(Math.signum(x2)*speed);
 		}
-		System.out.println("moveTo " + x2 + "," + y2);
+		
 		setTileTarget(getTileX()+x2,getTileY()+y2);
 	}
 

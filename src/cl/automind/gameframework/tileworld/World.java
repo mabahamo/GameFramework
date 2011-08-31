@@ -69,7 +69,7 @@ public class World implements Observer{
 		for(int i=0;i<list.size();i++){
 			Body b = list.get(i);
 			if (!b.disabled() && decorator != null){
-				decorator.paint(g2,b);
+				decorator.paint(g2,b,this);
 			}
 		}
 	}
@@ -122,5 +122,14 @@ public class World implements Observer{
 			}
 		}
 	}
+
+	public int getWidth(){
+		return w;
+	}
+	
+	public int getHeight(){
+		return h;
+	}
+
 
 }

@@ -17,10 +17,6 @@ public class Body extends Observable{
 	protected boolean moving = false;
 	private boolean needCheckForCollisions = true;
 	
-	
-	//cuantos cuadros puede avanzar en cada direccion
-	private int speed = 2;
-	
 	public Body(int x, int y) {
 		setPosition(x,y);
 	}
@@ -73,7 +69,7 @@ public class Body extends Observable{
 	
 	
 	public int getSpeed(){
-		return speed;
+		return 2;
 	}
 	
 	protected void checkHeading(float dx, float dy) {
@@ -119,7 +115,6 @@ public class Body extends Observable{
 		if (dy != 0) {
 			this.sy = this.sy + (dy / Math.abs(dy))*getSpeed()*SIZE/FPS;
 		}
-		;
 		
 		//al terminar el movimiento seteamos el tile en el que estamos
 		if (moving && dx == 0 && dy == 0){
@@ -139,11 +134,11 @@ public class Body extends Observable{
 	}
 
 	public void moveTo(int x2, int y2) {
-		if (Math.abs(x2) > speed){
-			x2 = (int)(Math.signum(x2)*speed);
+		if (Math.abs(x2) > getSpeed()){
+			x2 = (int)(Math.signum(x2)*getSpeed());
 		}
-		if (Math.abs(y2) > speed){
-			y2 = (int)(Math.signum(x2)*speed);
+		if (Math.abs(y2) > getSpeed()){
+			y2 = (int)(Math.signum(y2)*getSpeed());
 		}
 		
 		setTileTarget(getTileX()+x2,getTileY()+y2);

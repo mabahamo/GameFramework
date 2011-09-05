@@ -82,7 +82,7 @@ public class Body extends Observable{
 		}
 		if (dx != 0){
 			heading = (int)(180*Math.atan(Math.abs(dy/dx))/Math.PI);
-			if (dx < 0 && dy < 0){
+			if (dx < 0 && dy <= 0){
 				heading = 180 + heading;
 			}
 			if (dx < 0 && dy > 0){
@@ -91,8 +91,8 @@ public class Body extends Observable{
 			if (dx > 0 && dy < 0){
 				heading = 270 + heading;
 			}
-			if (dx > 0 && dy > 0){
-				
+			if (dx > 0 && dy == 0){
+				heading = 0;
 			}
 		}
 		else {

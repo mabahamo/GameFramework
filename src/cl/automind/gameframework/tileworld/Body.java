@@ -101,7 +101,7 @@ public class Body extends Observable{
 		}
 	}
 
-	public void update() {
+	public void update(int remainingFrames) {
 		if (disabled()){
 			return;
 		}
@@ -109,15 +109,24 @@ public class Body extends Observable{
 		float dy = this.ty - this.sy;
 
 		if (dx != 0) {
-			this.sx = this.sx + (dx / Math.abs(dx))*getSpeed()*SIZE/FPS;
+			if (Math.abs(dx) > 1.0*getSpeed()*SIZE/FPS){
+				this.sx = this.sx + Math.signum(dx)*getSpeed()*SIZE/FPS;
+			}
+			else {
+				this.sx = this.sx + dx;
+			}
 		}
 
 		if (dy != 0) {
-			this.sy = this.sy + (dy / Math.abs(dy))*getSpeed()*SIZE/FPS;
+			if (Math.abs(dy) > 1.0*getSpeed()*SIZE/FPS){
+				this.sy = this.sy + Math.signum(sy)*getSpeed()*SIZE/FPS;
+			}
+			else {
+				this.sy = this.sy + dy;
+			}			
 		}
-		
 		//al terminar el movimiento seteamos el tile en el que estamos
-		if (moving && dx == 0 && dy == 0){
+		if (remainingFrames == 0 && dx == 0 && dy == 0){
 			moving = false;
 			this.x = (int)((sx-10)/SIZE);
 			this.y = (int)((sy-10)/SIZE);

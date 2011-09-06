@@ -44,11 +44,11 @@ public class World implements Observer{
 		return list.iterator();
 	}
 
-	public void update() {
+	public void update(int remainingFrames) {
 		for(int i=0;i<list.size();i++){
 			Body b = list.get(i);
 			if (!b.disabled()){
-				b.update();
+				b.update(remainingFrames);
 			}
 		}
 	}

@@ -119,7 +119,7 @@ public class Body extends Observable{
 
 		if (dy != 0) {
 			if (Math.abs(dy) > 1.0*getSpeed()*SIZE/FPS){
-				this.sy = this.sy + Math.signum(sy)*getSpeed()*SIZE/FPS;
+				this.sy = this.sy + Math.signum(dy)*getSpeed()*SIZE/FPS;
 			}
 			else {
 				this.sy = this.sy + dy;

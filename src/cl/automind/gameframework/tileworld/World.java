@@ -143,6 +143,7 @@ public class World implements Observer{
 	}
 	
 	private void disable(Body b){
+		System.out.println("Destroy " + b);
 		Vector<Body> v = counter.get((Integer)b.getType());
 		v.remove(b);
 		

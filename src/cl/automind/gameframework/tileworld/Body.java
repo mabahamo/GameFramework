@@ -17,6 +17,7 @@ public class Body extends Observable{
 	protected boolean moving = false;
 	private boolean needCheckForCollisions = true;
 	private int type;
+	private World world;
 	
 	/**
 	 * Inicializa un nuevo agente.
@@ -24,9 +25,10 @@ public class Body extends Observable{
 	 * @param y
 	 * @param type tipo de agente
 	 */
-	public Body(int x, int y, int type) {
+	public Body(int x, int y, int type, World world) {
 		setPosition(x,y);
 		this.type = type;
+		this.world = world;
 	}
 
 	public void setEnabled(boolean b) {
@@ -112,11 +114,12 @@ public class Body extends Observable{
 	}
 
 	public void update(int remainingFrames) {
-		if (disabled()){
+		if (disabled() || !moving){
 			return;
 		}
 		float dx = this.tx - this.sx;
 		float dy = this.ty - this.sy;
+		
 
 		if (dx != 0) {
 			if (Math.abs(dx) > 1.0*getSpeed()*SIZE/FPS){
@@ -135,17 +138,37 @@ public class Body extends Observable{
 				this.sy = this.sy + dy;
 			}			
 		}
-		//al terminar el movimiento seteamos el tile en el que estamos
-		if (remainingFrames == 0 && dx == 0 && dy == 0){
+		
+		
+		//toro magic!
+		if (this.sx > world.getWidth()*SIZE){
+			this.sx = this.sx - world.getWidth()*SIZE;
+			this.tx = this.tx - world.getWidth()*SIZE;
+		}
+		if (this.sx < 0){
+			this.sx = world.getWidth()*SIZE + this.sx;
+			this.tx = world.getWidth()*SIZE + this.tx;
+		}
+		if (this.sy > world.getHeight()*SIZE){
+			this.sy = this.sy - world.getHeight()*SIZE;
+			this.ty = this.ty - world.getHeight()*SIZE;
+		}
+		if (this.sy < 0){
+			this.sy = world.getHeight()*SIZE + this.sy;
+			this.ty = world.getHeight()*SIZE + this.ty;
+		}
+		
+		//al terminar el movimiento seteamos el tile en el que estamos		
+		if (remainingFrames == 0){
 			moving = false;
 			this.x = (int)((sx-10)/SIZE);
 			this.y = (int)((sy-10)/SIZE);
+			setPosition(x,y);
 			setChanged();
 			notifyObservers(new BodyPositionEvent(x,y));
 		}
 		
 		checkHeading(dx,dy);
-		
 	}
 	
 	public boolean isMoving(){

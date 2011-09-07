@@ -3,6 +3,7 @@ package cl.automind.gameframework.tileworld;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
@@ -16,6 +17,7 @@ public class World implements Observer{
 	private final static boolean DRAW_GRID = false;
 	private int w,h;
 	private Vector<Body> list = new Vector<Body>();
+	private Hashtable<Integer,Vector<Body>> counter = new Hashtable<Integer,Vector<Body>>();
 	private BodyDecorator decorator;
 	private Random r = new Random(42);
 //	private long time = System.currentTimeMillis();
@@ -36,6 +38,12 @@ public class World implements Observer{
 
 	public void add(Body p) {
 		list.add(p);
+		if (!counter.containsKey((Integer)p.getType())){
+			counter.put((Integer)p.getType(),new Vector<Body>());
+		}
+		Vector<Body> v = counter.get((Integer)p.getType());
+		v.add(p);
+		
 		p.addObserver(this);
 		System.out.println("Players on world " + list.size());
 	}
@@ -92,6 +100,9 @@ public class World implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
+		if (arg instanceof BodyDisabledEvent){
+			disable((Body)o);
+		}
 //		if (arg instanceof BodyPositionEvent){
 //			checkCollissions((Body)o);
 //			
@@ -129,6 +140,21 @@ public class World implements Observer{
 	
 	public int getHeight(){
 		return h;
+	}
+	
+	private void disable(Body b){
+		Vector<Body> v = counter.get((Integer)b.getType());
+		v.remove(b);
+		
+	}
+
+	public int getPopulation(int bodyType) {
+		Vector<Body> v = counter.get((Integer)bodyType);
+		return v.size();
+	}
+
+	public Vector<Body> getBodyByType(int bodyType) {
+		return counter.get((Integer)bodyType);
 	}
 
 

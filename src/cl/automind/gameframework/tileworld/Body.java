@@ -16,13 +16,23 @@ public class Body extends Observable{
 	private boolean enabled = true;
 	protected boolean moving = false;
 	private boolean needCheckForCollisions = true;
+	private int type;
 	
-	public Body(int x, int y) {
+	/**
+	 * Inicializa un nuevo agente.
+	 * @param x
+	 * @param y
+	 * @param type tipo de agente
+	 */
+	public Body(int x, int y, int type) {
 		setPosition(x,y);
+		this.type = type;
 	}
 
 	public void setEnabled(boolean b) {
 		this.enabled = b;
+		setChanged();
+		notifyObservers(new BodyDisabledEvent());
 	}
 	
 	public double distance(Body target) {
@@ -143,13 +153,15 @@ public class Body extends Observable{
 	}
 
 	public void moveTo(int x2, int y2) {
+		if (x2 == 0 && y2 == 0){
+			return;
+		}
 		if (Math.abs(x2) > getSpeed()){
 			x2 = (int)(Math.signum(x2)*getSpeed());
 		}
 		if (Math.abs(y2) > getSpeed()){
 			y2 = (int)(Math.signum(y2)*getSpeed());
 		}
-		
 		setTileTarget(getTileX()+x2,getTileY()+y2);
 	}
 
@@ -159,6 +171,10 @@ public class Body extends Observable{
 
 	public void setNeedCheckCollisions(boolean b) {
 		needCheckForCollisions = b;
+	}
+
+	public int getType() {
+		return type;
 	}
 
 	

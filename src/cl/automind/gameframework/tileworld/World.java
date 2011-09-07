@@ -157,5 +157,95 @@ public class World implements Observer{
 		return counter.get((Integer)bodyType);
 	}
 
+	/**
+	 * Retorna la m’nima distancia en un mundo toroidal
+	 * @param p
+	 * @param test
+	 * @return
+	 */
+	public double distance(Body p, Body test) {
+		Coordinate o = p.getPosition(); 
+		Coordinate a = test.getPosition();
+		Coordinate b = translate(a,getWidth(),0);
+		Coordinate c = translate(a,-1*getWidth(),0);
+		Coordinate d = translate(a,0,getHeight());
+		Coordinate e = translate(a,0,-1*getHeight());
+		
+		double da = o.distance(a);
+		double db = o.distance(b);
+		double dc = o.distance(c);
+		double dd = o.distance(d);
+		double de = o.distance(e);
+
+		return Math.min(Math.min(da, db), Math.min(dc, Math.min(dd, de)));
+	}
+
+	private Coordinate translate(Coordinate a, int dx, int dy){
+		Coordinate aux = new Coordinate(a);
+		aux.x += dx;
+		aux.y += dy;
+		return aux;
+	}
+
+	/**
+	 * Retorna la posici—n mas cercana entre los cuerpos p y t considerando un mundo toroidal
+	 * @param p
+	 * @param t
+	 * @return
+	 */
+	public Coordinate getPosition(Body p, Body target) {
+		Coordinate o = p.getPosition(); 
+		Coordinate a = target.getPosition();
+		Coordinate b = translate(a,getWidth(),0);
+		Coordinate c = translate(a,-1*getWidth(),0);
+		Coordinate d = translate(a,0,getHeight());
+		Coordinate e = translate(a,0,-1*getHeight());
+		double da = o.distance(a);
+		double db = o.distance(b);
+		double dc = o.distance(c);
+		double dd = o.distance(d);
+		double de = o.distance(e);
+		double minDistance = Math.min(Math.min(da, db), Math.min(dc, Math.min(dd, de)));
+		
+		if (minDistance == da){
+			return a;
+		}
+		if (minDistance == db){
+			return b;
+		}
+		if (minDistance == dc){
+			return c;
+		}
+		if (minDistance == dd){
+			return d;
+		}
+		if (minDistance == de){
+			return e;
+		}
+		
+		return a;
+	}
+	
+	/**
+	 * Retorna un vector con todos los agentes que son del tipo indicado y que estan en la vecindad de p 
+	 * @param bodyType
+	 * @param p 
+	 * @param distance radio de la vecindad
+	 * @return
+	 */
+	public Vector<Body> getNear(int bodyType, Body p, int distance) {
+		Vector<Body> type = counter.get((Integer)bodyType);
+		Vector<Body> aux = new Vector<Body>();
+		for(Body test: type){
+			if (!test.disabled()){
+				double td = distance(p,test);
+				if ((int)td <= distance){
+					aux.add(test);
+				}
+			}
+		}
+		return aux;
+	}
+	
 
 }

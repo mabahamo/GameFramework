@@ -37,10 +37,6 @@ public class Body extends Observable{
 		notifyObservers(new BodyDisabledEvent());
 	}
 	
-	public double distance(Body target) {
-		return target.getPosition().distance(this.getPosition());
-	}
-	
 	public Coordinate getPosition() {
 		return new Coordinate(x,y);
 	}

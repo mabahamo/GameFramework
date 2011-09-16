@@ -17,7 +17,8 @@ public class Body extends Observable{
 	protected boolean moving = false;
 	private boolean needCheckForCollisions = true;
 	private int type;
-	private World world;
+	private int worldWidth = 0;
+	private int worldHeight = 0;
 	
 	/**
 	 * Inicializa un nuevo agente.
@@ -25,10 +26,9 @@ public class Body extends Observable{
 	 * @param y
 	 * @param type tipo de agente
 	 */
-	public Body(int x, int y, int type, World world) {
+	public Body(int x, int y, int type) {
 		setPosition(x,y);
 		this.type = type;
-		this.world = world;
 	}
 
 	public void setEnabled(boolean b) {
@@ -140,22 +140,25 @@ public class Body extends Observable{
 		}
 		
 		
+		
 		//toro magic!
-		if (this.sx > world.getWidth()*SIZE){
-			this.sx = this.sx - world.getWidth()*SIZE;
-			this.tx = this.tx - world.getWidth()*SIZE;
-		}
-		if (this.sx < 0){
-			this.sx = world.getWidth()*SIZE + this.sx;
-			this.tx = world.getWidth()*SIZE + this.tx;
-		}
-		if (this.sy > world.getHeight()*SIZE){
-			this.sy = this.sy - world.getHeight()*SIZE;
-			this.ty = this.ty - world.getHeight()*SIZE;
-		}
-		if (this.sy < 0){
-			this.sy = world.getHeight()*SIZE + this.sy;
-			this.ty = world.getHeight()*SIZE + this.ty;
+		if (worldWidth > 0 && worldHeight > 0){
+			if (this.sx > worldWidth*SIZE){
+				this.sx = this.sx - worldWidth*SIZE;
+				this.tx = this.tx - worldWidth*SIZE;
+			}
+			if (this.sx < 0){
+				this.sx = worldWidth*SIZE + this.sx;
+				this.tx = worldWidth*SIZE + this.tx;
+			}
+			if (this.sy > worldHeight*SIZE){
+				this.sy = this.sy - worldHeight*SIZE;
+				this.ty = this.ty - worldHeight*SIZE;
+			}
+			if (this.sy < 0){
+				this.sy = worldHeight*SIZE + this.sy;
+				this.ty = worldHeight*SIZE + this.ty;
+			}
 		}
 		
 		//al terminar el movimiento seteamos el tile en el que estamos		
@@ -198,6 +201,11 @@ public class Body extends Observable{
 
 	public int getType() {
 		return type;
+	}
+
+	public void setWorldSize(int w, int h) {
+		this.worldWidth = w;
+		this.worldHeight = h;
 	}
 
 	

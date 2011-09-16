@@ -3,12 +3,12 @@ package cl.automind.gameframework.tileworld;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.Hashtable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
-import java.util.Vector;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import cl.automind.math.Coordinate;
 
@@ -16,8 +16,7 @@ import cl.automind.math.Coordinate;
 public class World implements Observer{
 	private final static boolean DRAW_GRID = false;
 	private int w,h;
-	private Vector<Body> list = new Vector<Body>();
-	private Hashtable<Integer,Vector<Body>> counter = new Hashtable<Integer,Vector<Body>>();
+	private ConcurrentLinkedQueue<Body> list = new ConcurrentLinkedQueue<Body>();
 	private BodyDecorator decorator;
 	private Random r = new Random(42);
 	private CollisionListener collisionListener;
@@ -36,27 +35,20 @@ public class World implements Observer{
 	}
 
 	public void add(Body p) {
+		p.setWorldSize(this.w,this.h);
 		list.add(p);
-		if (!counter.containsKey((Integer)p.getType())){
-			counter.put((Integer)p.getType(),new Vector<Body>());
-		}
-		Vector<Body> v = counter.get((Integer)p.getType());
-		v.add(p);
-		
 		p.addObserver(this);
 		System.out.println("Players on world " + list.size());
 	}
 	
-	public Iterator<Body> getIterator(){
-		return list.iterator();
-	}
-
+	
 	public void update(int remainingFrames) {
-		for(int i=0;i<list.size();i++){
-			Body b = list.get(i);
+		Iterator<Body> it = list.iterator();
+		while(it.hasNext()){
+			Body b = it.next();
 			if (!b.disabled()){
 				b.update(remainingFrames);
-			}
+			}			
 		}
 	}
 
@@ -73,11 +65,12 @@ public class World implements Observer{
 		}	
 		
 		Graphics2D g2 = (Graphics2D)g;
-		for(int i=0;i<list.size();i++){
-			Body b = list.get(i);
+		Iterator<Body> it = list.iterator();
+		while(it.hasNext()){
+			Body b = it.next();
 			if (!b.disabled() && decorator != null){
 				decorator.paint(g2,b,this);
-			}
+			}			
 		}
 	}
 
@@ -117,25 +110,27 @@ public class World implements Observer{
 		if (collisionListener == null){
 			return;
 		}
-		for(int i=0;i<list.size();i++){
-			Body b = list.get(i);
-			if (!b.disabled() && b != target){
-				if (b.x == target.x && b.y == target.y){
-					collisionListener.collisionOccured(new CollisionEvent(target,b));
+		Iterator<Body> it = list.iterator();
+		while(it.hasNext()){
+			Body b = it.next();
+				if (!b.disabled() && b != target){
+					if (b.x == target.x && b.y == target.y){
+						collisionListener.collisionOccured(new CollisionEvent(target,b));
+					}
 				}
-			}
-		}
+			}			
 	}
 
 	public void checkCollisions() {
-		for(int i=0;i<list.size();i++){
-			Body b = list.get(i);
-			if (!b.disabled() && b.needCheckForCollisions()){
-				//solamente se chequea el agente si es que se ha movido
-				checkCollissions(b);
-				b.setNeedCheckCollisions(false);
+		Iterator<Body> it = list.iterator();
+		while(it.hasNext()){
+			Body b = it.next();
+				if (!b.disabled() && b.needCheckForCollisions()){
+					//solamente se chequea el agente si es que se ha movido
+					checkCollissions(b);
+					b.setNeedCheckCollisions(false);
+				}
 			}
-		}
 	}
 
 	public int getWidth(){
@@ -156,19 +151,17 @@ public class World implements Observer{
 	}
 
 	public int getPopulation(int bodyType) {
-		Vector<Body> v = counter.get((Integer)bodyType);
 		int i = 0;
-		for(Body b: v){
-			if (!b.disabled()){
+		Iterator<Body> it = list.iterator();
+		while(it.hasNext()){
+			Body b = it.next();
+			if (b.getType() == bodyType && !b.disabled()){
 				i++;
 			}
 		}
 		return i;
 	}
 
-	public Vector<Body> getBodyByType(int bodyType) {
-		return counter.get((Integer)bodyType);
-	}
 
 	/**
 	 * Retorna la m’nima distancia en un mundo toroidal
@@ -246,11 +239,12 @@ public class World implements Observer{
 	 * @param distance radio de la vecindad
 	 * @return
 	 */
-	public Vector<Body> getNear(int bodyType, Body p, int distance) {
-		Vector<Body> type = counter.get((Integer)bodyType);
-		Vector<Body> aux = new Vector<Body>();
-		for(Body test: type){
-			if (!test.disabled()){
+	public ArrayList<Body> getNear(int bodyType, Body p, int distance) {
+		ArrayList<Body> aux = new ArrayList<Body>();
+		Iterator<Body> it = list.iterator();
+		while(it.hasNext()){
+			Body test = it.next();
+			if (test.getType() == bodyType && !test.disabled()){
 				double td = distance(p,test);
 				if ((int)td <= distance){
 					aux.add(test);
@@ -260,9 +254,7 @@ public class World implements Observer{
 		return aux;
 	}
 
-	public Vector<Body> getBodies() {
-		return list;
-	}
+
 
 	public Coordinate getRandomNearPosition(Coordinate b) {
 		Coordinate c = new Coordinate(b);
@@ -289,6 +281,10 @@ public class World implements Observer{
 		}
 		System.out.println("Error no pude entregar coordenada cerca de " + b);
 		return b;
+	}
+
+	public Iterator<Body> getIterator() {
+		return list.iterator();
 	}
 	
 

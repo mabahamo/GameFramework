@@ -53,6 +53,7 @@ public class SoundManager {
 		running = true;
 		Thread t = new Thread() {
 			public void run() {
+				System.out.println("Starting sound Manager");
 				while (running) {
 					if (queue.isEmpty()) {
 						try {
@@ -119,9 +120,23 @@ public class SoundManager {
 	}
 
 	public void playFromJar(String string) {
+		playFromJar(string,true);
+	}
+	
+	/**
+	 * Agrega un sonido a la cola de reproducci—n. Si @always es falso entonces se revisa la cola y s—lo se agrega si es que no exist’a antes.
+	 * @param string
+	 * @param always
+	 */
+	public void playFromJar(String string, boolean always) {
+		if (!always && queue.contains('1' + string)){
+			return;
+		}
 		queue.add('1' + string);
 		if (!running){
 			start();
 		}
 	}
+
+	
 }

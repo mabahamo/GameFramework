@@ -20,7 +20,6 @@ public class World implements Observer{
 	private Hashtable<Integer,Vector<Body>> counter = new Hashtable<Integer,Vector<Body>>();
 	private BodyDecorator decorator;
 	private Random r = new Random(42);
-//	private long time = System.currentTimeMillis();
 	private CollisionListener collisionListener;
 	
 	public World(int i, int j) {
@@ -88,13 +87,18 @@ public class World implements Observer{
 		}
 		while(true){
 			Coordinate candidate = new Coordinate(r.nextInt(w),r.nextInt(h));
-			if (!isPlayerOnTile(candidate)){
+			if (!existPlayerOnTile(candidate)){
 				return candidate;
 			}
 		}
 	}
 
-	private boolean isPlayerOnTile(Coordinate candidate) {
+	private boolean existPlayerOnTile(Coordinate candidate) {
+		for(Body b: list){
+			if (!b.disabled() && b.getPosition().equal(candidate)){
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -144,14 +148,22 @@ public class World implements Observer{
 	
 	private void disable(Body b){
 		System.out.println("Destroy " + b);
-		Vector<Body> v = counter.get((Integer)b.getType());
-		v.remove(b);
+		
+//		Vector<Body> v = counter.get((Integer)b.getType());
+//		v.remove(b);
+//		list.remove(b);
 		
 	}
 
 	public int getPopulation(int bodyType) {
 		Vector<Body> v = counter.get((Integer)bodyType);
-		return v.size();
+		int i = 0;
+		for(Body b: v){
+			if (!b.disabled()){
+				i++;
+			}
+		}
+		return i;
 	}
 
 	public Vector<Body> getBodyByType(int bodyType) {
@@ -246,6 +258,37 @@ public class World implements Observer{
 			}
 		}
 		return aux;
+	}
+
+	public Vector<Body> getBodies() {
+		return list;
+	}
+
+	public Coordinate getRandomNearPosition(Coordinate b) {
+		Coordinate c = new Coordinate(b);
+		if (!existPlayerOnTile(c)){
+			return c;
+		}
+		for(int i=1;i<40;i++){
+			c.x = b.x + i;	
+			if (!existPlayerOnTile(c)){
+				return c;
+			}
+			c.x = b.x - i;
+			if (!existPlayerOnTile(c)){
+				return c;
+			}
+			c.y = b.y + i;
+			if (!existPlayerOnTile(c)){
+				return c;
+			}
+			c.y = b.y - i;
+			if (!existPlayerOnTile(c)){
+				return c;
+			}
+		}
+		System.out.println("Error no pude entregar coordenada cerca de " + b);
+		return b;
 	}
 	
 

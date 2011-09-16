@@ -47,6 +47,10 @@ public class Body extends Observable{
 		this.sx = this.tx = x*SIZE+10;
 		this.sy = this.ty = y*SIZE+10;
 	}
+	
+	public void setPosition(Coordinate c){
+		setPosition(c.x,c.y);
+	}
 
 	public boolean disabled() {
 		return !enabled;

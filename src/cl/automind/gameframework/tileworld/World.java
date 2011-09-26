@@ -10,7 +10,7 @@ import java.util.Observer;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import cl.automind.math.Coordinate;
+import cl.automind.math.VectorXY;
 
 
 public class World implements Observer{
@@ -74,19 +74,19 @@ public class World implements Observer{
 		}
 	}
 
-	public Coordinate randomEmptyPosition() {
+	public VectorXY randomEmptyPosition() {
 		if (list.size() >= w*h){
 			return null;
 		}
 		while(true){
-			Coordinate candidate = new Coordinate(r.nextInt(w),r.nextInt(h));
+			VectorXY candidate = new VectorXY(r.nextInt(w),r.nextInt(h));
 			if (!existPlayerOnTile(candidate)){
 				return candidate;
 			}
 		}
 	}
 
-	private boolean existPlayerOnTile(Coordinate candidate) {
+	private boolean existPlayerOnTile(VectorXY candidate) {
 		for(Body b: list){
 			if (!b.disabled() && b.getPosition().equal(candidate)){
 				return true;
@@ -170,12 +170,12 @@ public class World implements Observer{
 	 * @return
 	 */
 	public double distance(Body p, Body test) {
-		Coordinate o = p.getPosition(); 
-		Coordinate a = test.getPosition();
-		Coordinate b = translate(a,getWidth(),0);
-		Coordinate c = translate(a,-1*getWidth(),0);
-		Coordinate d = translate(a,0,getHeight());
-		Coordinate e = translate(a,0,-1*getHeight());
+		VectorXY o = p.getPosition(); 
+		VectorXY a = test.getPosition();
+		VectorXY b = translate(a,getWidth(),0);
+		VectorXY c = translate(a,-1*getWidth(),0);
+		VectorXY d = translate(a,0,getHeight());
+		VectorXY e = translate(a,0,-1*getHeight());
 		
 		double da = o.distance(a);
 		double db = o.distance(b);
@@ -186,8 +186,8 @@ public class World implements Observer{
 		return Math.min(Math.min(da, db), Math.min(dc, Math.min(dd, de)));
 	}
 
-	private Coordinate translate(Coordinate a, int dx, int dy){
-		Coordinate aux = new Coordinate(a);
+	private VectorXY translate(VectorXY a, int dx, int dy){
+		VectorXY aux = new VectorXY(a);
 		aux.x += dx;
 		aux.y += dy;
 		return aux;
@@ -199,13 +199,13 @@ public class World implements Observer{
 	 * @param t
 	 * @return
 	 */
-	public Coordinate getPosition(Body p, Body target) {
-		Coordinate o = p.getPosition(); 
-		Coordinate a = target.getPosition();
-		Coordinate b = translate(a,getWidth(),0);
-		Coordinate c = translate(a,-1*getWidth(),0);
-		Coordinate d = translate(a,0,getHeight());
-		Coordinate e = translate(a,0,-1*getHeight());
+	public VectorXY getPosition(Body p, Body target) {
+		VectorXY o = p.getPosition(); 
+		VectorXY a = target.getPosition();
+		VectorXY b = translate(a,getWidth(),0);
+		VectorXY c = translate(a,-1*getWidth(),0);
+		VectorXY d = translate(a,0,getHeight());
+		VectorXY e = translate(a,0,-1*getHeight());
 		double da = o.distance(a);
 		double db = o.distance(b);
 		double dc = o.distance(c);
@@ -256,8 +256,8 @@ public class World implements Observer{
 
 
 
-	public Coordinate getRandomNearPosition(Coordinate b) {
-		Coordinate c = new Coordinate(b);
+	public VectorXY getRandomNearPosition(VectorXY b) {
+		VectorXY c = new VectorXY(b);
 		if (!existPlayerOnTile(c)){
 			return c;
 		}

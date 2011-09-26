@@ -2,10 +2,10 @@ package cl.automind.gameframework.tileworld;
 
 import java.util.Observable;
 
-import cl.automind.math.Coordinate;
+import cl.automind.math.VectorXY;
 
 
-public class Body extends Observable{
+public abstract class Body extends Observable{
 	
 	public int x,y,tx,ty;
 	public float sx,sy;
@@ -19,6 +19,7 @@ public class Body extends Observable{
 	private int type;
 	private int worldWidth = 0;
 	private int worldHeight = 0;
+	private int energy = 0;
 	
 	/**
 	 * Inicializa un nuevo agente.
@@ -29,6 +30,7 @@ public class Body extends Observable{
 	public Body(int x, int y, int type) {
 		setPosition(x,y);
 		this.type = type;
+		this.energy = getStartEnergy();
 	}
 
 	public void setEnabled(boolean b) {
@@ -37,8 +39,8 @@ public class Body extends Observable{
 		notifyObservers(new BodyDisabledEvent());
 	}
 	
-	public Coordinate getPosition() {
-		return new Coordinate(x,y);
+	public VectorXY getPosition() {
+		return new VectorXY(x,y);
 	}
 
 	public void setPosition(int x, int y) {
@@ -47,11 +49,11 @@ public class Body extends Observable{
 		this.sx = this.tx = x*SIZE+10;
 		this.sy = this.ty = y*SIZE+10;
 	}
-	
-	public void setPosition(Coordinate c){
-		setPosition(c.x,c.y);
-	}
 
+	public void setPosition(VectorXY v) {
+		setPosition((int)v.x, (int)v.y);
+	}
+	
 	public boolean disabled() {
 		return !enabled;
 	}
@@ -208,10 +210,24 @@ public class Body extends Observable{
 		this.worldHeight = h;
 	}
 
-	
+	public void addEnergy(int energy) {
+		setEnergy(getEnergy() + energy);
+	}
 
-	
+	public int getEnergy() {
+		return energy;
+	}
 
+	public void setEnergy(int i) {
+		if (i > getMaxEnergy()){
+			i = getMaxEnergy();
+		}
+		this.energy = i;
+	}
+	
+	abstract public int getStartEnergy();
+	
+	abstract public int getMaxEnergy();
 	
 	
 }

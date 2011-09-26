@@ -1,13 +1,11 @@
 package cl.automind.gameframework;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 
 public class StorageContext {
 
 	private static StorageContext instance = new StorageContext();
-	private Connection con;
-	private String name;
+//	private Connection con;
+//	private String name;
 
 	public static StorageContext getInstance() {
 		return instance;
@@ -16,8 +14,8 @@ public class StorageContext {
 	private StorageContext() {
 		try {
 			Class.forName("org.hsqldb.jdbc.JDBCDriver");
-			name = "jdbc:hsqldb:mem:" + System.currentTimeMillis();
-			con = DriverManager.getConnection(name, "SA","");
+//			name = "jdbc:hsqldb:mem:" + System.currentTimeMillis();
+//			con = DriverManager.getConnection(name, "SA","");
 
 
 		} catch (Exception ex) {

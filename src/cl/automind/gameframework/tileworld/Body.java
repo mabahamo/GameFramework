@@ -82,7 +82,7 @@ public abstract class Body extends Observable{
 	}
 	
 	
-	public int getSpeed(){
+	public int getMaxSpeed(){
 		return 2;
 	}
 	
@@ -124,8 +124,8 @@ public abstract class Body extends Observable{
 		
 
 		if (dx != 0) {
-			if (Math.abs(dx) > 1.0*getSpeed()*SIZE/FPS){
-				this.sx = this.sx + Math.signum(dx)*getSpeed()*SIZE/FPS;
+			if (Math.abs(dx) > 1.0*getMaxSpeed()*SIZE/FPS){
+				this.sx = this.sx + Math.signum(dx)*getMaxSpeed()*SIZE/FPS;
 			}
 			else {
 				this.sx = this.sx + dx;
@@ -133,8 +133,8 @@ public abstract class Body extends Observable{
 		}
 
 		if (dy != 0) {
-			if (Math.abs(dy) > 1.0*getSpeed()*SIZE/FPS){
-				this.sy = this.sy + Math.signum(dy)*getSpeed()*SIZE/FPS;
+			if (Math.abs(dy) > 1.0*getMaxSpeed()*SIZE/FPS){
+				this.sy = this.sy + Math.signum(dy)*getMaxSpeed()*SIZE/FPS;
 			}
 			else {
 				this.sy = this.sy + dy;
@@ -184,11 +184,11 @@ public abstract class Body extends Observable{
 		if (x2 == 0 && y2 == 0){
 			return;
 		}
-		if (Math.abs(x2) > getSpeed()){
-			x2 = (int)(Math.signum(x2)*getSpeed());
+		if (Math.abs(x2) > getMaxSpeed()){
+			x2 = (int)(Math.signum(x2)*getMaxSpeed());
 		}
-		if (Math.abs(y2) > getSpeed()){
-			y2 = (int)(Math.signum(y2)*getSpeed());
+		if (Math.abs(y2) > getMaxSpeed()){
+			y2 = (int)(Math.signum(y2)*getMaxSpeed());
 		}
 		setTileTarget(getTileX()+x2,getTileY()+y2);
 	}

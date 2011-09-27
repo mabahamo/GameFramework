@@ -239,12 +239,13 @@ public class World implements Observer{
 	 * @param distance radio de la vecindad
 	 * @return
 	 */
-	public ArrayList<Body> getNear(int bodyType, Body p, int distance) {
-		ArrayList<Body> aux = new ArrayList<Body>();
-		Iterator<Body> it = list.iterator();
+	@SuppressWarnings("rawtypes")
+	public ArrayList getNear(int bodyType, Body p, int distance) {
+		ArrayList aux = new ArrayList();
+		Iterator it = list.iterator();
 		while(it.hasNext()){
-			Body test = it.next();
-			if (test.getType() == bodyType && !test.disabled()){
+			Body test = (Body)it.next();
+			if (test.getType() == bodyType && !test.disabled() && !p.equals(test)){
 				double td = distance(p,test);
 				if ((int)td <= distance){
 					aux.add(test);

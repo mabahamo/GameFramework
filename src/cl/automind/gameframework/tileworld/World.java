@@ -38,7 +38,6 @@ public class World implements Observer{
 		p.setWorldSize(this.w,this.h);
 		list.add(p);
 		p.addObserver(this);
-		System.out.println("Players on world " + list.size());
 	}
 	
 	
@@ -239,7 +238,7 @@ public class World implements Observer{
 	 * @param distance radio de la vecindad
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ArrayList getNear(int bodyType, Body p, int distance) {
 		ArrayList aux = new ArrayList();
 		Iterator it = list.iterator();

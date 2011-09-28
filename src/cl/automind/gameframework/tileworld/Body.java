@@ -19,7 +19,7 @@ public abstract class Body extends Observable{
 	private int type;
 	private int worldWidth = 0;
 	private int worldHeight = 0;
-	private int energy = 0;
+	private int energy, startEnergy;
 	
 	/**
 	 * Inicializa un nuevo agente.
@@ -27,10 +27,14 @@ public abstract class Body extends Observable{
 	 * @param y
 	 * @param type tipo de agente
 	 */
-	public Body(int x, int y, int type) {
+	public Body(int x, int y, int type, int startEnergy) {
 		setPosition(x,y);
 		this.type = type;
-		this.energy = getStartEnergy();
+		this.energy = this.startEnergy = startEnergy;
+	}
+	
+	public int getStartEnergy() {
+		return this.startEnergy;
 	}
 
 	public void setEnabled(boolean b) {
@@ -215,7 +219,7 @@ public abstract class Body extends Observable{
 	}
 
 	public int getEnergy() {
-		return energy;
+		return this.energy;
 	}
 
 	public void setEnergy(int i) {
@@ -224,8 +228,6 @@ public abstract class Body extends Observable{
 		}
 		this.energy = i;
 	}
-	
-	abstract public int getStartEnergy();
 	
 	abstract public int getMaxEnergy();
 	

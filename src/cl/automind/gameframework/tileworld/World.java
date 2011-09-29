@@ -169,22 +169,44 @@ public class World implements Observer{
 	 * @return
 	 */
 	public double distance(Body p, Body test) {
-		VectorXY o = p.getPosition(); 
-		VectorXY a = test.getPosition();
-		VectorXY b = translate(a,getWidth(),0);
-		VectorXY c = translate(a,-1*getWidth(),0);
-		VectorXY d = translate(a,0,getHeight());
-		VectorXY e = translate(a,0,-1*getHeight());
-		
-		double da = o.distance(a);
-		double db = o.distance(b);
-		double dc = o.distance(c);
-		double dd = o.distance(d);
-		double de = o.distance(e);
-
-		return Math.min(Math.min(da, db), Math.min(dc, Math.min(dd, de)));
+		return getVector(p,test).length();
 	}
 
+	/**
+	 * Retorna el vector de distancia m’nima en un mundo toroidal
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public VectorXY getVector(Body from, Body to) {
+		VectorXY o = from.getPosition(); 
+		VectorXY[] t = new VectorXY[5];
+		VectorXY a = to.getPosition();
+		t[0] = a;
+		t[1] = translate(a,getWidth(),0);
+		t[2] = translate(a,-1*getWidth(),0);
+		t[3] = translate(a,0,getHeight());
+		t[4] = translate(a,0,-1*getHeight());
+		
+		for(int i=0;i<5;i++){
+			t[i] = t[i].sub(o);
+		}
+	
+		double min = Double.MAX_VALUE;
+		VectorXY candidate = a;
+		for(int i=0;i<5;i++){
+			double d = t[i].length();
+			if (d < min){
+				min = d;
+				candidate = t[i];
+			}
+		}
+		return candidate;
+	}
+	
+	
+	
+	
 	private VectorXY translate(VectorXY a, int dx, int dy){
 		VectorXY aux = new VectorXY(a);
 		aux.x += dx;
@@ -192,45 +214,6 @@ public class World implements Observer{
 		return aux;
 	}
 
-	/**
-	 * Retorna la posici—n mas cercana entre los cuerpos p y t considerando un mundo toroidal
-	 * @param p
-	 * @param t
-	 * @return
-	 */
-	public VectorXY getPosition(Body p, Body target) {
-		VectorXY o = p.getPosition(); 
-		VectorXY a = target.getPosition();
-		VectorXY b = translate(a,getWidth(),0);
-		VectorXY c = translate(a,-1*getWidth(),0);
-		VectorXY d = translate(a,0,getHeight());
-		VectorXY e = translate(a,0,-1*getHeight());
-		double da = o.distance(a);
-		double db = o.distance(b);
-		double dc = o.distance(c);
-		double dd = o.distance(d);
-		double de = o.distance(e);
-		double minDistance = Math.min(Math.min(da, db), Math.min(dc, Math.min(dd, de)));
-		
-		if (minDistance == da){
-			return a;
-		}
-		if (minDistance == db){
-			return b;
-		}
-		if (minDistance == dc){
-			return c;
-		}
-		if (minDistance == dd){
-			return d;
-		}
-		if (minDistance == de){
-			return e;
-		}
-		
-		return a;
-	}
-	
 	/**
 	 * Retorna un vector con todos los agentes que son del tipo indicado y que estan en la vecindad de p 
 	 * @param bodyType

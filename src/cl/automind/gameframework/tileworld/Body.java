@@ -19,7 +19,8 @@ public abstract class Body extends Observable{
 	private int type;
 	private int worldWidth = 0;
 	private int worldHeight = 0;
-	private int energy, startEnergy;
+	double energy;
+	private int startEnergy;
 	
 	/**
 	 * Inicializa un nuevo agente.
@@ -39,8 +40,10 @@ public abstract class Body extends Observable{
 
 	public void setEnabled(boolean b) {
 		this.enabled = b;
-		setChanged();
-		notifyObservers(new BodyDisabledEvent());
+		if (b == false){
+			setChanged();
+			notifyObservers(new BodyDisabledEvent());
+		}
 	}
 	
 	public VectorXY getPosition() {
@@ -214,19 +217,23 @@ public abstract class Body extends Observable{
 		this.worldHeight = h;
 	}
 
-	public void addEnergy(int energy) {
-		setEnergy(getEnergy() + energy);
+	public void addEnergy(double d) {
+		setEnergy(getEnergy() + d);
 	}
 
-	public int getEnergy() {
+	public double getEnergy() {
 		return this.energy;
 	}
 
-	public void setEnergy(int i) {
-		if (i > getMaxEnergy()){
-			i = getMaxEnergy();
+	public void setEnergy(double d) {
+		if (d > getMaxEnergy()){
+			d = getMaxEnergy();
 		}
-		this.energy = i;
+		this.energy = d;
+		if (this.energy <= 0){
+			setEnabled(false);
+			
+		}
 	}
 	
 	abstract public int getMaxEnergy();

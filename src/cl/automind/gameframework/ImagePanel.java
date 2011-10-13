@@ -1,5 +1,6 @@
 package cl.automind.gameframework;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -20,6 +21,14 @@ public class ImagePanel extends JPanel{
 		}
 	}
 	
+	public ImagePanel(BufferedImage bi) {
+		backgroundImage = bi;
+		Dimension d = new Dimension(bi.getWidth(),bi.getHeight());
+		setSize(d);
+		setPreferredSize(d);
+		setMinimumSize(d);
+	}
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (backgroundImage != null){

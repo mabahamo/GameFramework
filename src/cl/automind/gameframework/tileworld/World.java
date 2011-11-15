@@ -89,26 +89,26 @@ public class World implements Observer{
 		}
 	}
 	
-	private VectorXY toLocal(VectorXY vector){
+	public VectorXY toLocal(VectorXY vector){
 		VectorXY s = new VectorXY(vector);
-			if (s.x > w*getBodySize()){
-				s.x = s.x - w*getBodySize();
-			}
-			if (s.x < 0){
-				s.x = w*getBodySize() + s.x;
-			}
-			if (s.y > h*getBodySize()){
-				s.y = s.y - h*getBodySize();
-			}
-			if (s.y < 0){
-				s.y = h*getBodySize() + s.y;
-			}
-			return s;
+		if (s.x > w){
+			s.x = s.x - w;
+		}
+		if (s.x < 0){
+			s.x = w + s.x;
+		}
+		if (s.y > h){
+			s.y = s.y - h;
+		}
+		if (s.y < 0){
+			s.y = h + s.y;
+		}
+		return s;
 	}
 
 	private boolean existPlayerOnTile(VectorXY candidate) {
 		for(Body b: list){
-			if (!b.disabled() && b.getPosition().equal(toLocal(candidate))){
+			if (!b.disabled() && b.getPosition().equals(toLocal(candidate))){
 				return true;
 			}
 		}
@@ -283,22 +283,17 @@ public class World implements Observer{
 		if (!existPlayerOnTile(c)){
 			return toLocal(c);
 		}
-		for(int i=1;i<getWidth();i++){
-			c.x = b.x + i;	
-			if (!existPlayerOnTile(c)){
-				return toLocal(c);
-			}
-			c.x = b.x - i;
-			if (!existPlayerOnTile(c)){
-				return toLocal(c);
-			}
-			c.y = b.y + i;
-			if (!existPlayerOnTile(c)){
-				return toLocal(c);
-			}
-			c.y = b.y - i;
-			if (!existPlayerOnTile(c)){
-				return toLocal(c);
+		for(int i=1;i<1000;i++){
+			for(int j=0;j<i;j++){
+				for(int k=0;k<i;k++){
+					int x = r.nextInt(j*2+1)-j;
+					int y = r.nextInt(j*2+1)-j;
+					c.x = b.x + x;
+					c.y = b.y + y;
+					if (!existPlayerOnTile(c)){
+						return toLocal(c);
+					}
+				}
 			}
 		}
 		System.out.println("Error no pude entregar coordenada cerca de " + b);

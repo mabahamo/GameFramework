@@ -24,9 +24,7 @@ public class VectorXY {
 		return Math.sqrt(dx*dx + dy*dy);
 	}
 	
-	public boolean equal(VectorXY t){
-		return t.x == this.x && t.y == this.y;
-	}
+
 	
 	public VectorXY add(VectorXY t){
 		VectorXY v = new VectorXY(this.x,this.y);
@@ -42,7 +40,19 @@ public class VectorXY {
 		v.y *= d;
 		return v;
 	}
-
+	
+	public boolean equals(VectorXY v){
+		return this.x == v.x && this.y == v.y;
+	}
+	
+	@Override
+	public boolean equals(Object b){
+//		if (b instanceof VectorXY){
+//			return this.equals((VectorXY)b);
+//		}
+		return this.equals((VectorXY)b);
+//		return false;
+	}
 	
 	public double length(){
 		return Math.sqrt(x*x + y*y);
@@ -58,5 +68,13 @@ public class VectorXY {
 		v.y -= t.y;
 		return v;
 	}
+	
+	@Override
+	public int hashCode(){
+		int x = (int)(100 * this.x);
+		int y = (int)(100 * this.y);
+		return x ^ y;
+	}
+
 
 }

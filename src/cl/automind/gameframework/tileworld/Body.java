@@ -190,9 +190,10 @@ public abstract class Body extends Observable{
 		return moving;
 	}
 
-	public void moveTo(int x2, int y2) {
+	public VectorXY moveTo(int x2, int y2) {
+		VectorXY tileTarget = new VectorXY(getTileX(),getTileY());
 		if (x2 == 0 && y2 == 0){
-			return;
+			return tileTarget;
 		}
 		if (Math.abs(x2) > getMaxSpeed()){
 			x2 = (int)(Math.signum(x2)*getMaxSpeed());
@@ -201,7 +202,11 @@ public abstract class Body extends Observable{
 			y2 = (int)(Math.signum(y2)*getMaxSpeed());
 		}
 		setTileTarget(getTileX()+x2,getTileY()+y2);
+		tileTarget.x += x2;
+		tileTarget.y += y2;
+		return tileTarget;
 	}
+	
 
 	public boolean needCheckForCollisions() {
 		return needCheckForCollisions;

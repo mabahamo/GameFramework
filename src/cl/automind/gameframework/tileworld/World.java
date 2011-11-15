@@ -106,7 +106,7 @@ public class World implements Observer{
 		return s;
 	}
 
-	private boolean existPlayerOnTile(VectorXY candidate) {
+	public boolean existPlayerOnTile(VectorXY candidate) {
 		for(Body b: list){
 			if (!b.disabled() && b.getPosition().equals(toLocal(candidate))){
 				return true;

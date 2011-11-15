@@ -15,11 +15,13 @@ import cl.automind.math.VectorXY;
 
 public class World implements Observer{
 	private final static boolean DRAW_GRID = false;
+	private static final int BODY_SIZE = 20;
 	private int w,h;
 	private ConcurrentLinkedQueue<Body> list = new ConcurrentLinkedQueue<Body>();
 	private BodyDecorator decorator;
 	private Random r = new Random(42);
 	private CollisionListener collisionListener;
+	private PlayerListenerInterface playerListener;
 	
 	public World(int i, int j) {
 		this.w = i;
@@ -35,9 +37,11 @@ public class World implements Observer{
 	}
 
 	public void add(Body p) {
-		p.setWorldSize(this.w,this.h);
 		list.add(p);
 		p.addObserver(this);
+		if (playerListener != null){
+			playerListener.newPlayer(p);
+		}
 	}
 	
 	
@@ -84,14 +88,35 @@ public class World implements Observer{
 			}
 		}
 	}
+	
+	private VectorXY toLocal(VectorXY vector){
+		VectorXY s = new VectorXY(vector);
+			if (s.x > w*getBodySize()){
+				s.x = s.x - w*getBodySize();
+			}
+			if (s.x < 0){
+				s.x = w*getBodySize() + s.x;
+			}
+			if (s.y > h*getBodySize()){
+				s.y = s.y - h*getBodySize();
+			}
+			if (s.y < 0){
+				s.y = h*getBodySize() + s.y;
+			}
+			return s;
+	}
 
 	private boolean existPlayerOnTile(VectorXY candidate) {
 		for(Body b: list){
-			if (!b.disabled() && b.getPosition().equal(candidate)){
+			if (!b.disabled() && b.getPosition().equal(toLocal(candidate))){
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	private int getBodySize(){
+		return BODY_SIZE;
 	}
 
 	@Override
@@ -142,7 +167,9 @@ public class World implements Observer{
 	
 	private void disable(Body b){
 		System.out.println("Destroy " + b);
-		
+		if (playerListener != null){
+			playerListener.destroy(b);
+		}
 //		Vector<Body> v = counter.get((Integer)b.getType());
 //		v.remove(b);
 //		list.remove(b);
@@ -227,39 +254,51 @@ public class World implements Observer{
 		Iterator it = list.iterator();
 		while(it.hasNext()){
 			Body test = (Body)it.next();
-			if (test.getType() == bodyType && !test.disabled() && !p.equals(test)){
-				double td = distance(p,test);
-				if ((int)td <= distance){
+			if (p == null && distance == -1){
+				if (test.getType() == bodyType && !test.disabled()){
 					aux.add(test);
+				}
+			}
+			else {
+				if (test.getType() == bodyType && !test.disabled() && !p.equals(test)){
+					double td = distance(p,test);
+					if ((int)td <= distance){
+						aux.add(test);
+					}
 				}
 			}
 		}
 		return aux;
 	}
 
+	@SuppressWarnings("rawtypes")
+	public ArrayList getIteratorByType(int type) {
+		return getNear(type,null,-1);
+	}
+	
 
 
 	public VectorXY getRandomNearPosition(VectorXY b) {
 		VectorXY c = new VectorXY(b);
 		if (!existPlayerOnTile(c)){
-			return c;
+			return toLocal(c);
 		}
-		for(int i=1;i<40;i++){
+		for(int i=1;i<getWidth();i++){
 			c.x = b.x + i;	
 			if (!existPlayerOnTile(c)){
-				return c;
+				return toLocal(c);
 			}
 			c.x = b.x - i;
 			if (!existPlayerOnTile(c)){
-				return c;
+				return toLocal(c);
 			}
 			c.y = b.y + i;
 			if (!existPlayerOnTile(c)){
-				return c;
+				return toLocal(c);
 			}
 			c.y = b.y - i;
 			if (!existPlayerOnTile(c)){
-				return c;
+				return toLocal(c);
 			}
 		}
 		System.out.println("Error no pude entregar coordenada cerca de " + b);
@@ -270,5 +309,14 @@ public class World implements Observer{
 		return list.iterator();
 	}
 	
+	public void addPlayerListener(PlayerListenerInterface pli) {
+		Iterator<Body> it = getIterator();
+		//notificamos al listener de todos los jugadores que ya existen
+		while(it.hasNext()){
+			Body b = it.next();
+			pli.newPlayer(b);
+		}
+		this.playerListener = pli;		
+	}
 
 }

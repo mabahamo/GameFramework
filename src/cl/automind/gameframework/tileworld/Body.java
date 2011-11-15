@@ -21,6 +21,8 @@ public abstract class Body extends Observable{
 	private int worldHeight = 0;
 	double energy;
 	private int startEnergy;
+	private static int counter = 1;
+	protected int id = 0;
 	
 	/**
 	 * Inicializa un nuevo agente.
@@ -32,6 +34,7 @@ public abstract class Body extends Observable{
 		setPosition(x,y);
 		this.type = type;
 		this.energy = this.startEnergy = startEnergy;
+		this.id = Body.counter++;
 	}
 	
 	public int getStartEnergy() {
@@ -237,6 +240,10 @@ public abstract class Body extends Observable{
 	}
 	
 	abstract public int getMaxEnergy();
+
+	public int getId() {
+		return id;
+	}
 	
 	
 }

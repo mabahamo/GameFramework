@@ -37,6 +37,7 @@ public class World implements Observer{
 	}
 
 	public void add(Body p) {
+		p.setWorldSize(getWidth(), getHeight());
 		list.add(p);
 		p.addObserver(this);
 		if (playerListener != null){

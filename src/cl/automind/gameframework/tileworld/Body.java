@@ -176,9 +176,7 @@ public abstract class Body extends Observable{
 		//al terminar el movimiento seteamos el tile en el que estamos		
 		if (remainingFrames == 0){
 			moving = false;
-			this.x = (int)((sx-10)/SIZE);
-			this.y = (int)((sy-10)/SIZE);
-			setPosition(x,y);
+			setPosition((int)((sx-10)/SIZE),(int)((sy-10)/SIZE));
 			setChanged();
 			notifyObservers(new BodyPositionEvent(x,y));
 		}

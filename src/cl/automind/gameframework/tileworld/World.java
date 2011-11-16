@@ -92,13 +92,13 @@ public class World implements Observer{
 	
 	public VectorXY toLocal(VectorXY vector){
 		VectorXY s = new VectorXY(vector);
-		if (s.x > w){
+		if (s.x >= w){
 			s.x = s.x - w;
 		}
 		if (s.x < 0){
 			s.x = w + s.x;
 		}
-		if (s.y > h){
+		if (s.y >= h){
 			s.y = s.y - h;
 		}
 		if (s.y < 0){

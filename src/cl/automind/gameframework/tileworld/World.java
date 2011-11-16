@@ -15,7 +15,6 @@ import cl.automind.math.VectorXY;
 
 public class World implements Observer{
 	private final static boolean DRAW_GRID = false;
-	private static final int BODY_SIZE = 20;
 	private int w,h;
 	private ConcurrentLinkedQueue<Body> list = new ConcurrentLinkedQueue<Body>();
 	private BodyDecorator decorator;
@@ -109,17 +108,13 @@ public class World implements Observer{
 
 	public boolean existPlayerOnTile(VectorXY candidate) {
 		for(Body b: list){
-			if (!b.disabled() && b.getPosition().equals(toLocal(candidate))){
+			if (!b.disabled() && toLocal(b.getPosition()).equals(toLocal(candidate))){
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	private int getBodySize(){
-		return BODY_SIZE;
-	}
-
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg instanceof BodyDisabledEvent){
@@ -138,7 +133,7 @@ public class World implements Observer{
 		Iterator<Body> it = list.iterator();
 		while(it.hasNext()){
 			Body b = it.next();
-				if (!b.disabled() && b != target){
+				if (!b.disabled() && !b.equals(target)){
 					if (b.x == target.x && b.y == target.y){
 						collisionListener.collisionOccured(new CollisionEvent(target,b));
 					}
@@ -298,6 +293,7 @@ public class World implements Observer{
 			}
 		}
 		System.out.println("Error no pude entregar coordenada cerca de " + b);
+		System.exit(0);
 		return b;
 	}
 

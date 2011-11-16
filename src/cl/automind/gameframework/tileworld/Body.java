@@ -37,6 +37,11 @@ public abstract class Body extends Observable{
 		this.id = Body.counter++;
 	}
 	
+	@Override
+	public boolean equals(Object b){
+		return this.id == ((Body)b).id;
+	}
+	
 	public int getStartEnergy() {
 		return this.startEnergy;
 	}

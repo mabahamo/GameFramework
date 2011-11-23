@@ -229,6 +229,9 @@ public abstract class Body extends Observable{
 	}
 
 	public void addEnergy(double d) {
+		if (d < 0){
+			System.out.println("Change energy " + d + " on " + this);
+		}
 		setEnergy(getEnergy() + d);
 	}
 

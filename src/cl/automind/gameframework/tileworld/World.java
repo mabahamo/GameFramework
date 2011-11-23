@@ -1,6 +1,7 @@
 package cl.automind.gameframework.tileworld;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import javax.swing.JOptionPane;
 
 import cl.automind.math.VectorXY;
 
@@ -309,6 +312,24 @@ public class World implements Observer{
 			pli.newPlayer(b);
 		}
 		this.playerListener = pli;		
+	}
+
+	public boolean validStartCondition(Component c) {
+
+		Iterator<Body> it1 = list.iterator();
+		while(it1.hasNext()){
+			Body b = it1.next();
+			Iterator<Body> it2 = list.iterator();
+			while(it2.hasNext()){
+				Body o = it2.next();
+				if (!o.equals(b) && b.getPosition().equals(o.getPosition())){
+					System.out.println("Conflicto en " + o + " con " + b);
+					JOptionPane.showMessageDialog(c, "Error de integridad, se detectaron dos organismos utilizando la casilla: " + (o.x + 1) + "," + (o.y + 1), "Plantilla incorrecta", JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 }

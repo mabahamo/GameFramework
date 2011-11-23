@@ -4,8 +4,6 @@ import java.awt.Font;
 
 
 public final class FontLoader {
-//    private static final Logger logger = Logger.getLogger(FontLoader.class.getName());
-
 
 	public static Font loadFont(String url, int size) {
 		

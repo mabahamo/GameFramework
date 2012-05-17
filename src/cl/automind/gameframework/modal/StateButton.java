@@ -13,7 +13,7 @@ public class StateButton extends JButton {
 	private BotoneraDecoratorInterface decorator;
 	
 	public StateButton(int casilla, int states, BotoneraDecoratorInterface decorator){
-//		super("" + casilla);
+		super("" + casilla);
 //		this.states = states;
 //		this.casilla = casilla;
 		this.decorator = decorator;

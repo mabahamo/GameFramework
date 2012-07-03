@@ -9,9 +9,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javazoom.jl.player.Player;
 
-public class SoundManager {
+public class SoundManager implements ISoundManager {
 
-	private static SoundManager instance = new SoundManager();
+	private static ISoundManager instance = new SoundManager();
 	private ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<String>();
 	private boolean running;
 	private String local = ".AutoMind";
@@ -20,10 +20,11 @@ public class SoundManager {
 
 	}
 
-	public static SoundManager getInstance() {
+	public static ISoundManager getInstance() {
 		return instance;
 	}
 	
+	@Override
 	public String voicePath(String msg) {
 		String base = System.getProperty("user.home")
 				+ System.getProperty("file.separator") + local
@@ -34,6 +35,7 @@ public class SoundManager {
 		return file;
 	}
 	
+	@Override
 	public void playVoice(String msg){
 		queue.add('0' + voicePath(msg));
 		if (!running){
@@ -41,7 +43,7 @@ public class SoundManager {
 		}
 	}
 
-
+	@Override
 	public void play(String absolutePath) {
 		queue.add('0'+absolutePath);
 		if (!running) {
@@ -110,7 +112,7 @@ public class SoundManager {
 
 	}
 	
-
+	@Override
 	public String clean(String txt){
 		txt = txt.replaceAll("-", " guion ");
 
@@ -119,15 +121,12 @@ public class SoundManager {
 		return txt;
 	}
 
+	@Override
 	public void playFromJar(String string) {
 		playFromJar(string,true);
 	}
 	
-	/**
-	 * Agrega un sonido a la cola de reproducci—n. Si @always es falso entonces se revisa la cola y s—lo se agrega si es que no exist’a antes.
-	 * @param string
-	 * @param always
-	 */
+	@Override
 	public void playFromJar(String string, boolean always) {
 		if (!always && queue.contains('1' + string)){
 			return;

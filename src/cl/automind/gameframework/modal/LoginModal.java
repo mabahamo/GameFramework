@@ -25,7 +25,7 @@ public class LoginModal extends JPanel{
 		setBackground(new Color(80,80,80));
 		
 		JLabel lblTeam = new JLabel("Equipo");
-		JLabel lblPassword = new JLabel("Contrase–a");
+		JLabel lblPassword = new JLabel("Contraseña");
 		lblTeam.setForeground(Color.WHITE);
 		lblPassword.setForeground(Color.WHITE);
 		add(lblTeam);

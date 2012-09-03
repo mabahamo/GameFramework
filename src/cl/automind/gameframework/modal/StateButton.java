@@ -4,6 +4,8 @@ import java.awt.Graphics;
 
 import javax.swing.JButton;
 
+import cl.automind.gameframework.SoundManager;
+
 
 public class StateButton extends JButton {
 	
@@ -30,8 +32,15 @@ public class StateButton extends JButton {
 	public int getCurrentState(){
 		return currentState;
 	}
-	
+
+	public final static int PLOMO = 0;
+	public final static int NEGRO = 1;
+	public final static int BLANCO = 2;
+	public final static int REGLA = 3;
+	public final static int REGLA_NEGRO = 4;
+	public final static int REGLA_BLANCO = 5;
 	public void setNewState(int state) {
+		SoundManager.getInstance().playFromJar("/cl/metaforas/sorpresasmagicas/sounds/" + (state > 2? "switch": "menu_select_1") + ".mp3", false);
 		this.currentState = state;
 		this.repaint(); 
 //		System.out.println("New buttonState " + casilla + " : " + currentState);

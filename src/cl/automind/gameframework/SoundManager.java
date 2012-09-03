@@ -37,7 +37,7 @@ public class SoundManager implements ISoundManager {
 	
 	@Override
 	public void playVoice(String msg){
-		queue.add('0' + voicePath(msg));
+		addToQueue('0' + voicePath(msg));
 		if (!running){
 			start();
 		}
@@ -45,7 +45,7 @@ public class SoundManager implements ISoundManager {
 
 	@Override
 	public void play(String absolutePath) {
-		queue.add('0'+absolutePath);
+		addToQueue('0'+absolutePath);
 		if (!running) {
 			start();
 		}
@@ -70,10 +70,12 @@ public class SoundManager implements ISoundManager {
 						try {
 							BufferedInputStream bis;
 							if (type == '0'){
+								System.out.println("Play audio from file" + filename);
 								FileInputStream fis = new FileInputStream(filename);
 								bis = new BufferedInputStream(fis);
 							}
 							else {
+								System.out.println("Play audio from jarfile" + filename);
 								bis = new BufferedInputStream(SoundManager.class.getResourceAsStream(filename));
 							}
 							Player player = new Player(bis);
@@ -131,11 +133,19 @@ public class SoundManager implements ISoundManager {
 		if (!always && queue.contains('1' + string)){
 			return;
 		}
-		queue.add('1' + string);
+		addToQueue('1' + string);
 		if (!running){
 			start();
 		}
 	}
-
+	protected void addToQueue(String sound){
+		queue.add(sound);
+//		System.out.println("Queueing::" + sound);
+//		int count = 0;
+//		for(String q: queue){
+//			System.out.println("SoundManagerQueue[" + count + "]=" + q);
+//			count++;
+//		}
+	}
 	
 }

@@ -63,5 +63,13 @@ public interface IStorageContext {
 	@Deprecated
 	public abstract Connection getConnection();
 
+	public abstract int getPuntajeTurno(int turno);
+
+	public abstract int getPuntajeTurnoCasilla(int turno, int casilla);
+
+	public abstract void setTeamId(int teamId);
+
+	public abstract int getTeamId();
+
 
 }

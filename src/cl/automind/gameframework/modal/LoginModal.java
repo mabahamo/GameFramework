@@ -25,7 +25,7 @@ public class LoginModal extends JPanel{
 		setBackground(new Color(80,80,80));
 		
 		JLabel lblTeam = new JLabel("Equipo");
-		JLabel lblPassword = new JLabel("Contraseña");
+		JLabel lblPassword = new JLabel("ContraseÃ±a");
 		lblTeam.setForeground(Color.WHITE);
 		lblPassword.setForeground(Color.WHITE);
 		add(lblTeam);
@@ -33,13 +33,15 @@ public class LoginModal extends JPanel{
 		add(lblPassword);
 		add(password);
 		add(new JLabel(""));
-		
-		btn.addActionListener(new ActionListener(){
+		ActionListener al = new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				disableLoginButton();
 				pl.doLogin(username.getText(), password.getPassword());
 			}
-		});
+		};
+		username.addActionListener(al);
+		password.addActionListener(al);
+		btn.addActionListener(al);
 		
 		add(btn);
 	}

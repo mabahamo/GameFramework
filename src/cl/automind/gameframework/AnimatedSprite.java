@@ -36,6 +36,7 @@ public class AnimatedSprite extends JComponent {
 		Thread t = new Thread() {
 			public void run() {
 				running = true;
+				@SuppressWarnings("unused")
 				int zeros = 0;
 				while (running) {
 					current = (current++)%bufferImage.length;

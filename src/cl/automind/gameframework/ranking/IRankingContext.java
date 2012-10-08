@@ -25,4 +25,16 @@ public interface IRankingContext {
 
 	public abstract String getPais();
 
+	public abstract void setPlayersReady(boolean playersReady);
+
+	public abstract boolean isPlayersReady();
+
+	public abstract void setTeamsReady(boolean teamsReady);
+
+	public abstract boolean isTeamsReady();
+
+	public abstract void setCurrent(RankingType current);
+
+	public abstract RankingType getCurrent();
+
 }

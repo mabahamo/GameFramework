@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 
 public class Clock extends Observable {
 
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 	private volatile long targetTime = System.currentTimeMillis() + (99 * 60 + 59)*1000;
 	private volatile boolean running = false;

@@ -1,5 +1,7 @@
 package cl.automind.gameframework.network;
 
+import java.util.Queue;
+
 import cl.automind.gameframework.AbstractLevel;
 import cl.automind.gameframework.modal.PasswordListenerInterface;
 
@@ -36,6 +38,15 @@ public interface INetworkManager {
 	public abstract void fetchRanking();
 
 	public abstract void fetchTeamRanking();
+
+
+	public abstract void downloadAndPlayVoice(String msg) throws Exception;
+
+
+	public abstract void setRequestTeamsQueue(Queue<Integer> requestTeamsQueue);
+
+
+	public abstract Queue<Integer> getRequestTeamsQueue();
 
 
 }

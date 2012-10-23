@@ -49,4 +49,7 @@ public interface INetworkManager {
 	public abstract Queue<Integer> getRequestTeamsQueue();
 
 
+	public abstract long getInstanceId();
+
+
 }
